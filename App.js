@@ -1,22 +1,34 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Button, TextInput, Text } from 'react-native';
+import { StyleSheet, View, Button, TextInput, Text,  FlatList } from 'react-native';
 
 export default function App() {
   const [firstNumber, setfirstNumber] = React.useState(0);
   const [secondNumber, setsecondNumber] = React.useState(0);
   const [answer, setAnswer] = React.useState(firstNumber + secondNumber);
+  const [data, setData] = React.useState([]);
+  const [text, setText] = React.useState('');
 
   const buttonPlus = () => {
     const first=parseInt(firstNumber);
     const second=parseInt(secondNumber);
     const sum=first + second;
     setAnswer(sum);
+    const text = firstNumber+'+'+secondNumber+'='+sum;
+    setData([...data, { key: text }]);
+    setText('');
+    setfirstNumber('');
+    setsecondNumber('');
   }
 
   const buttonMinus = () => {
     const sum=firstNumber - secondNumber
     setAnswer(sum);
+    const text = firstNumber+'-'+secondNumber+'='+sum;
+    setData([...data, { key: text }]);
+    setText('');
+    setfirstNumber('');
+    setsecondNumber('');
   }
 
   
@@ -28,6 +40,7 @@ export default function App() {
             {'Result: '+ answer}
           </Text>
         </View>
+        
         <View>
         
         <TextInput
@@ -53,6 +66,18 @@ export default function App() {
               </View>
           <StatusBar style="auto" />
           </View>
+        </View>
+        <View>
+          <Text>
+            {'History: '}
+          </Text>
+          <FlatList style={styles.list}
+            data={data}
+            renderItem={({ item }) =>
+            <Text>{item.key}</Text>
+        }
+          keyExtractor={(item, index) => index.toString()}
+      />
         </View>
       </View>
 
